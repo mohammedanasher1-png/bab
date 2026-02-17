@@ -15,8 +15,7 @@
     }
 
     *{box-sizing:border-box;margin:0;padding:0;font-family:'Cairo',sans-serif}
-
-    body{background:var(--gray);color:var(--black);}
+    body{background:var(--gray);color:var(--black);}    
 
     header{
       background:var(--white);
@@ -28,105 +27,42 @@
       position:sticky;top:0;z-index:10;
     }
 
-    .logo{font-size:26px;font-weight:700;color:var(--black)}
+    .logo{font-size:26px;font-weight:700}
     .logo span{color:var(--pink)}
 
-    nav a{
-      margin:0 10px;
-      text-decoration:none;
-      color:var(--dark-gray);
-      font-weight:600;
-      cursor:pointer;
-    }
-
+    nav a{margin:0 10px;text-decoration:none;color:var(--dark-gray);font-weight:600;cursor:pointer}
     nav a:hover{color:var(--pink)}
 
     .container{max-width:1200px;margin:auto;padding:30px}
-
     section{display:none}
     section.active{display:block}
 
     h1{margin-bottom:15px}
 
-    .hero{
-      background:var(--white);
-      padding:50px;
-      border-radius:14px;
-      text-align:center;
-      box-shadow:0 10px 25px rgba(0,0,0,0.05);
-    }
+    .hero{background:var(--white);padding:50px;border-radius:14px;text-align:center;box-shadow:0 10px 25px rgba(0,0,0,0.05)}
 
-    .hero h1{font-size:32px}
-    .hero p{margin-top:10px;color:var(--dark-gray)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-top:30px}
 
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:20px;
-      margin-top:30px;
-    }
-
-    .card{
-      background:var(--white);
-      padding:15px;
-      border-radius:12px;
-      box-shadow:0 5px 15px rgba(0,0,0,0.05);
-      transition:0.3s;
-    }
-
+    .card{background:var(--white);padding:15px;border-radius:12px;box-shadow:0 5px 15px rgba(0,0,0,0.05);transition:.3s}
     .card:hover{transform:translateY(-5px)}
 
     .card img{width:100%;border-radius:10px}
-
     .price{color:var(--pink);font-weight:700;margin-top:8px}
 
-    button{
-      background:var(--black);
-      color:white;
-      border:none;
-      padding:10px 15px;
-      border-radius:8px;
-      margin-top:10px;
-      cursor:pointer;
-    }
-
+    button{background:var(--black);color:white;border:none;padding:10px 15px;border-radius:8px;margin-top:10px;cursor:pointer}
     button:hover{background:var(--pink)}
 
-    .cart-item{
-      background:var(--white);
-      padding:15px;
-      border-radius:10px;
-      margin-bottom:10px;
-    }
+    .cart-item{background:var(--white);padding:15px;border-radius:10px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
 
     .form-group{margin-bottom:15px}
-    input, textarea{
-      width:100%;padding:10px;border-radius:8px;border:1px solid #ccc
-    }
+    input, textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #ccc}
 
-    footer{
-      margin-top:40px;
-      text-align:center;
-      padding:20px;
-      color:var(--dark-gray);
-    }
+    footer{margin-top:40px;text-align:center;padding:20px;color:var(--dark-gray)}
 
-    /* Admin Panel */
-    .admin{
-      background:#1c1c1c;
-      color:white;
-      padding:30px;
-      border-radius:14px;
-    }
-
-    .admin h2{margin-bottom:20px}
-
-    .admin input{
-      background:#2c2c2c;
-      color:white;
-      border:none;
-    }
-
+    /* Admin */
+    .admin{background:#1c1c1c;color:white;padding:30px;border-radius:14px}
+    .admin input{background:#2c2c2c;color:white;border:none;margin-bottom:10px}
+    .login-box{max-width:400px;margin:auto;background:white;padding:30px;border-radius:14px;box-shadow:0 10px 25px rgba(0,0,0,.05)}
   </style>
 </head>
 <body>
@@ -139,7 +75,7 @@
     <a onclick="showPage('cart')">السلة</a>
     <a onclick="showPage('about')">من نحن</a>
     <a onclick="showPage('contact')">تواصل</a>
-    <a onclick="showPage('admin')">لوحة التحكم</a>
+    <a onclick="showPage('adminLogin')">لوحة التحكم</a>
   </nav>
 </header>
 
@@ -182,6 +118,7 @@
 <section id="cart">
   <h1>السلة</h1>
   <div id="cartItems"></div>
+  <button onclick="clearCart()">حذف السلة بالكامل</button>
   <button onclick="showPage('checkout')">الانتقال للدفع</button>
 </section>
 
@@ -203,17 +140,22 @@
   <p>باب منصة تجمع المنتجات في مكان واحد لتسهيل تجربة الشراء وتقديم خدمة موثوقة وسريعة.</p>
 </section>
 
-<!-- RETURN POLICY -->
-<section id="return">
-  <h1>سياسة الاسترجاع</h1>
-  <p>يمكن استرجاع المنتج خلال 7 أيام في حال وجود عيب أو عدم مطابقته للوصف.</p>
-</section>
-
 <!-- CONTACT -->
 <section id="contact">
   <h1>تواصل معنا</h1>
   <textarea placeholder="اكتب رسالتك"></textarea>
   <button>إرسال</button>
+</section>
+
+<!-- ADMIN LOGIN -->
+<section id="adminLogin">
+  <div class="login-box">
+    <h1>تسجيل دخول الإدارة</h1>
+    <input id="adminUser" placeholder="اسم المستخدم">
+    <input id="adminPass" type="password" placeholder="كلمة المرور">
+    <button onclick="loginAdmin()">دخول</button>
+    <p id="loginError" style="color:red;margin-top:10px"></p>
+  </div>
 </section>
 
 <!-- ADMIN PANEL -->
@@ -239,6 +181,7 @@
     document.getElementById(id).classList.add('active');
   }
 
+  // CART SYSTEM
   let cart=[];
 
   function addToCart(name,price){
@@ -246,15 +189,41 @@
     renderCart();
   }
 
+  function removeItem(index){
+    cart.splice(index,1);
+    renderCart();
+  }
+
+  function clearCart(){
+    cart=[];
+    renderCart();
+  }
+
   function renderCart(){
     const container=document.getElementById('cartItems');
     container.innerHTML='';
-    cart.forEach(item=>{
+    cart.forEach((item,index)=>{
       const div=document.createElement('div');
       div.className='cart-item';
-      div.innerText=`${item.name} - ${item.price}$`;
+      div.innerHTML=`
+        <span>${item.name} - ${item.price}$</span>
+        <button onclick="removeItem(${index})">حذف</button>
+      `;
       container.appendChild(div);
     })
+  }
+
+  // ADMIN LOGIN (Demo Only)
+  function loginAdmin(){
+    const user=document.getElementById('adminUser').value;
+    const pass=document.getElementById('adminPass').value;
+
+    if(user==='admin' && pass==='1234'){
+      showPage('admin');
+      document.getElementById('loginError').innerText='';
+    }else{
+      document.getElementById('loginError').innerText='بيانات الدخول غير صحيحة';
+    }
   }
 </script>
 
