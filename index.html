@@ -221,4 +221,41 @@ function login(){
   if(u==="admin" && p==="1234"){
     showPage("adminPanel");
   }else{
-    document.getElementById("error").innerText="بيانات خاطئة"
+    document.getElementById("error").innerText="بيانات خاطئة";
+  }
+}
+
+/* ---------- ADD PRODUCT (UPLOAD IMAGE LOCAL) ---------- */
+
+function addProduct(){
+
+  const name=document.getElementById("pname").value;
+  const price=document.getElementById("pprice").value;
+  const file=document.getElementById("pimage").files[0];
+
+  if(!file) return alert("اختر صورة");
+
+  const reader=new FileReader();
+
+  reader.onload=function(e){
+
+    products.push({
+      name:name,
+      price:price,
+      img:e.target.result
+    });
+
+    renderProducts();
+    alert("تم إضافة المنتج");
+    showPage("home");
+  };
+
+  reader.readAsDataURL(file);
+}
+
+renderProducts();
+
+</script>
+
+</body>
+</html>
