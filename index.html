@@ -1,231 +1,224 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>باب | سوق إلكتروني</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --black:#111111;
-      --gray:#f2f2f2;
-      --dark-gray:#555;
-      --pink:#e91e63;
-      --white:#ffffff;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>باب | سوق إلكتروني</title>
 
-    *{box-sizing:border-box;margin:0;padding:0;font-family:'Cairo',sans-serif}
-    body{background:var(--gray);color:var(--black);}    
+<style>
+:root{
+  --black:#111;
+  --gray:#f2f2f2;
+  --pink:#e91e63;
+  --white:#fff;
+}
 
-    header{
-      background:var(--white);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:15px 30px;
-      box-shadow:0 2px 10px rgba(0,0,0,0.05);
-      position:sticky;top:0;z-index:10;
-    }
+*{box-sizing:border-box;font-family:Cairo,Arial;margin:0;padding:0}
 
-    .logo{font-size:26px;font-weight:700}
-    .logo span{color:var(--pink)}
+body{background:var(--gray)}
 
-    nav a{margin:0 10px;text-decoration:none;color:var(--dark-gray);font-weight:600;cursor:pointer}
-    nav a:hover{color:var(--pink)}
+header{
+  background:white;
+  padding:15px 25px;
+  display:flex;
+  justify-content:space-between;
+  box-shadow:0 2px 10px rgba(0,0,0,.05);
+}
 
-    .container{max-width:1200px;margin:auto;padding:30px}
-    section{display:none}
-    section.active{display:block}
+.logo{font-size:24px;font-weight:bold}
+.logo span{color:var(--pink)}
 
-    h1{margin-bottom:15px}
+nav button{
+  background:none;
+  border:none;
+  margin:0 5px;
+  cursor:pointer;
+  font-weight:bold;
+}
 
-    .hero{background:var(--white);padding:50px;border-radius:14px;text-align:center;box-shadow:0 10px 25px rgba(0,0,0,0.05)}
+.container{max-width:1100px;margin:auto;padding:25px}
 
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-top:30px}
+section{display:none}
+section.active{display:block}
 
-    .card{background:var(--white);padding:15px;border-radius:12px;box-shadow:0 5px 15px rgba(0,0,0,0.05);transition:.3s}
-    .card:hover{transform:translateY(-5px)}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+}
 
-    .card img{width:100%;border-radius:10px}
-    .price{color:var(--pink);font-weight:700;margin-top:8px}
+.card{
+  background:white;
+  padding:15px;
+  border-radius:12px;
+  box-shadow:0 5px 15px rgba(0,0,0,.05);
+}
 
-    button{background:var(--black);color:white;border:none;padding:10px 15px;border-radius:8px;margin-top:10px;cursor:pointer}
-    button:hover{background:var(--pink)}
+.card img{width:100%;border-radius:10px}
 
-    .cart-item{background:var(--white);padding:15px;border-radius:10px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.price{color:var(--pink);font-weight:bold;margin:8px 0}
 
-    .form-group{margin-bottom:15px}
-    input, textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #ccc}
+button.action{
+  background:var(--black);
+  color:white;
+  border:none;
+  padding:8px 12px;
+  border-radius:8px;
+  cursor:pointer;
+}
 
-    footer{margin-top:40px;text-align:center;padding:20px;color:var(--dark-gray)}
+.cart-item{
+  background:white;
+  padding:10px;
+  border-radius:10px;
+  margin:10px 0;
+  display:flex;
+  justify-content:space-between;
+}
 
-    /* Admin */
-    .admin{background:#1c1c1c;color:white;padding:30px;border-radius:14px}
-    .admin input{background:#2c2c2c;color:white;border:none;margin-bottom:10px}
-    .login-box{max-width:400px;margin:auto;background:white;padding:30px;border-radius:14px;box-shadow:0 10px 25px rgba(0,0,0,.05)}
-  </style>
+.admin-box{
+  background:#1c1c1c;
+  color:white;
+  padding:20px;
+  border-radius:12px;
+}
+
+input{width:100%;padding:8px;margin:8px 0;border-radius:6px;border:1px solid #ccc}
+
+</style>
 </head>
+
 <body>
 
 <header>
-  <div class="logo">باب<span>.</span></div>
-  <nav>
-    <a onclick="showPage('home')">الرئيسية</a>
-    <a onclick="showPage('categories')">التصنيفات</a>
-    <a onclick="showPage('cart')">السلة</a>
-    <a onclick="showPage('about')">من نحن</a>
-    <a onclick="showPage('contact')">تواصل</a>
-    <a onclick="showPage('adminLogin')">لوحة التحكم</a>
-  </nav>
+<div class="logo">باب<span>.</span></div>
+<nav>
+<button onclick="showPage('home')">الرئيسية</button>
+<button onclick="showPage('cartPage')">السلة</button>
+<button onclick="showPage('adminLogin')">الإدارة</button>
+</nav>
 </header>
 
 <div class="container">
 
 <!-- HOME -->
 <section id="home" class="active">
-  <div class="hero">
-    <h1>مرحباً بك في باب</h1>
-    <p>مكان واحد لاكتشاف وشراء أفضل المنتجات بسهولة وثقة.</p>
-  </div>
-
-  <div class="grid">
-    <div class="card">
-      <img src="https://via.placeholder.com/300">
-      <h3>منتج تجريبي</h3>
-      <div class="price">30$</div>
-      <button onclick="addToCart('منتج تجريبي',30)">أضف للسلة</button>
-    </div>
-  </div>
-</section>
-
-<!-- CATEGORIES -->
-<section id="categories">
-  <h1>التصنيفات</h1>
-  <div class="grid">
-    <div class="card">إلكترونيات</div>
-    <div class="card">منزل</div>
-    <div class="card">إكسسوارات</div>
-  </div>
-</section>
-
-<!-- PRODUCT -->
-<section id="product">
-  <h1>صفحة المنتج</h1>
-  <p>تفاصيل المنتج، وصف احترافي، وفوائد المنتج تظهر هنا.</p>
+<h2>المنتجات</h2>
+<div id="products" class="grid"></div>
 </section>
 
 <!-- CART -->
-<section id="cart">
-  <h1>السلة</h1>
-  <div id="cartItems"></div>
-  <button onclick="clearCart()">حذف السلة بالكامل</button>
-  <button onclick="showPage('checkout')">الانتقال للدفع</button>
-</section>
-
-<!-- CHECKOUT -->
-<section id="checkout">
-  <h1>الدفع</h1>
-  <div class="form-group">
-    <input placeholder="الاسم الكامل">
-  </div>
-  <div class="form-group">
-    <input placeholder="العنوان">
-  </div>
-  <button>تأكيد الطلب</button>
-</section>
-
-<!-- ABOUT -->
-<section id="about">
-  <h1>من نحن</h1>
-  <p>باب منصة تجمع المنتجات في مكان واحد لتسهيل تجربة الشراء وتقديم خدمة موثوقة وسريعة.</p>
-</section>
-
-<!-- CONTACT -->
-<section id="contact">
-  <h1>تواصل معنا</h1>
-  <textarea placeholder="اكتب رسالتك"></textarea>
-  <button>إرسال</button>
+<section id="cartPage">
+<h2>السلة</h2>
+<div id="cart"></div>
+<button class="action" onclick="clearCart()">حذف السلة</button>
+<button class="action" onclick="checkout()">إتمام الطلب</button>
 </section>
 
 <!-- ADMIN LOGIN -->
 <section id="adminLogin">
-  <div class="login-box">
-    <h1>تسجيل دخول الإدارة</h1>
-    <input id="adminUser" placeholder="اسم المستخدم">
-    <input id="adminPass" type="password" placeholder="كلمة المرور">
-    <button onclick="loginAdmin()">دخول</button>
-    <p id="loginError" style="color:red;margin-top:10px"></p>
-  </div>
+<h2>دخول الإدارة</h2>
+<input id="user" placeholder="اسم المستخدم">
+<input id="pass" type="password" placeholder="كلمة المرور">
+<button class="action" onclick="login()">دخول</button>
+<p id="error" style="color:red"></p>
 </section>
 
 <!-- ADMIN PANEL -->
-<section id="admin">
-  <div class="admin">
-    <h2>لوحة تحكم باب</h2>
-    <p>إضافة منتج جديد:</p>
-    <input placeholder="اسم المنتج">
-    <input placeholder="السعر">
-    <button>إضافة المنتج</button>
-  </div>
+<section id="adminPanel">
+<div class="admin-box">
+<h3>إضافة منتج</h3>
+
+<input id="pname" placeholder="اسم المنتج">
+<input id="pprice" placeholder="السعر">
+<input type="file" id="pimage">
+
+<button class="action" onclick="addProduct()">إضافة</button>
+
+</div>
 </section>
 
 </div>
 
-<footer>
-  © 2026 باب — جميع الحقوق محفوظة
-</footer>
-
 <script>
-  function showPage(id){
-    document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-  }
 
-  // CART SYSTEM
-  let cart=[];
+/* ---------- NAVIGATION ---------- */
+function showPage(id){
+  document.querySelectorAll("section")
+  .forEach(s=>s.classList.remove("active"));
 
-  function addToCart(name,price){
-    cart.push({name,price});
-    renderCart();
-  }
+  document.getElementById(id).classList.add("active");
+}
 
-  function removeItem(index){
-    cart.splice(index,1);
-    renderCart();
-  }
+/* ---------- PRODUCTS ---------- */
 
-  function clearCart(){
-    cart=[];
-    renderCart();
-  }
+let products=[
+ {name:"سماعات",price:25,img:"https://via.placeholder.com/300"},
+ {name:"ساعة ذكية",price:40,img:"https://via.placeholder.com/300"}
+];
 
-  function renderCart(){
-    const container=document.getElementById('cartItems');
-    container.innerHTML='';
-    cart.forEach((item,index)=>{
-      const div=document.createElement('div');
-      div.className='cart-item';
-      div.innerHTML=`
+function renderProducts(){
+  const container=document.getElementById("products");
+  container.innerHTML="";
+
+  products.forEach((p,i)=>{
+    container.innerHTML+=`
+      <div class="card">
+        <img src="${p.img}">
+        <h3>${p.name}</h3>
+        <div class="price">${p.price}$</div>
+        <button class="action" onclick="addToCart(${i})">
+        أضف للسلة
+        </button>
+      </div>
+    `;
+  });
+}
+
+/* ---------- CART ---------- */
+
+let cart=[];
+
+function addToCart(i){
+  cart.push(products[i]);
+  renderCart();
+}
+
+function renderCart(){
+  const c=document.getElementById("cart");
+  c.innerHTML="";
+
+  cart.forEach((item,index)=>{
+    c.innerHTML+=`
+      <div class="cart-item">
         <span>${item.name} - ${item.price}$</span>
         <button onclick="removeItem(${index})">حذف</button>
-      `;
-      container.appendChild(div);
-    })
-  }
+      </div>
+    `;
+  });
+}
 
-  // ADMIN LOGIN (Demo Only)
-  function loginAdmin(){
-    const user=document.getElementById('adminUser').value;
-    const pass=document.getElementById('adminPass').value;
+function removeItem(i){
+  cart.splice(i,1);
+  renderCart();
+}
 
-    if(user==='admin' && pass==='1234'){
-      showPage('admin');
-      document.getElementById('loginError').innerText='';
-    }else{
-      document.getElementById('loginError').innerText='بيانات الدخول غير صحيحة';
-    }
-  }
-</script>
+function clearCart(){
+  cart=[];
+  renderCart();
+}
 
-</body>
-</html>
+function checkout(){
+  alert("تم إرسال الطلب — سيتم التواصل معك");
+}
+
+/* ---------- ADMIN LOGIN ---------- */
+
+function login(){
+  const u=document.getElementById("user").value;
+  const p=document.getElementById("pass").value;
+
+  if(u==="admin" && p==="1234"){
+    showPage("adminPanel");
+  }else{
+    document.getElementById("error").innerText="بيانات خاطئة"
