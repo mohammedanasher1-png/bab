@@ -1,170 +1,278 @@
-import React, { useState } from 'react';
-import { 
-  LayoutDashboard, Package, ShoppingCart, Users, 
-  BarChart3, Megaphone, Search, Bell, Menu, 
-  MoreHorizontal, ArrowUpRight, Filter
-} from 'lucide-react';
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAB | نظام الإدارة المتكامل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            /* Shopify Identity Colors */
+            --shopify-green: #008060;
+            --shopify-dark: #1a1c1d;
+            --shopify-bg: #f6f6f7;
+            --border-light: #e1e3e5;
+            /* Store Identity Colors */
+            --primary-violet: #8B5CF6;
+            --accent-gradient: linear-gradient(135deg, #8B5CF6 0%, #D946EF 100%);
+            --glass: rgba(255, 255, 255, 0.03);
+        }
 
-const ShopifyClone = () => {
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+        body { background: var(--shopify-bg); color: #303030; overflow-x: hidden; }
 
-  // Stats Data
-  const stats = [
-    { title: "Total Sales", value: "$128,430.00", change: "+12.5%", trend: "up" },
-    { title: "Orders", value: "1,432", change: "+8.2%", trend: "up" },
-    { title: "Conversion Rate", value: "3.24%", change: "-1.1%", trend: "down" },
-    { title: "Avg. Order Value", value: "$89.60", change: "+4.3%", trend: "up" },
-  ];
+        /* --- UI UTILITIES --- */
+        .flex { display: flex; }
+        .grid { display: grid; }
+        .hidden { display: none; }
+        .card { background: white; border-radius: 12px; border: 1px solid var(--border-light); shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
-  // Recent Orders Data
-  const orders = [
-    { id: "#1024", customer: "Ahmad Al-Sayer", date: "Today, 14:22", total: "$120.00", status: "Completed" },
-    { id: "#1023", customer: "Sarah Chen", date: "Today, 12:05", total: "$85.20", status: "Pending" },
-    { id: "#1022", customer: "John Doe", date: "Yesterday", total: "$210.00", status: "Cancelled" },
-    { id: "#1021", customer: "Maria Garcia", date: "Yesterday", total: "$45.00", status: "Completed" },
-  ];
+        /* --- SIDEBAR STYLE --- */
+        .sidebar {
+            width: 240px;
+            background: var(--shopify-dark);
+            height: 100vh;
+            position: fixed;
+            right: 0; top: 0;
+            color: #b5b5b5;
+            padding: 20px 10px;
+            transition: 0.3s;
+            z-index: 1001;
+        }
 
-  return (
-    <div className="flex h-screen bg-[#F1F1F1] font-sans text-[#303030]">
-      {/* SIDEBAR */}
-      <aside className={`${isSidebarOpen ? 'w-64' : 'w-20'} bg-[#1A1C1D] text-white transition-all duration-300 flex flex-col`}>
-        <div className="p-6 flex items-center gap-3">
-          <div className="w-8 h-8 bg-[#008060] rounded-lg flex items-center justify-center">
-            <span className="font-bold text-white text-xl">S</span>
-          </div>
-          {isSidebarOpen && <span className="font-semibold text-lg">Shopify</span>}
+        .sidebar-brand { color: white; padding: 10px 15px; font-weight: 900; font-size: 24px; margin-bottom: 30px; }
+        .nav-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 15px; border-radius: 8px;
+            cursor: pointer; transition: 0.2s; margin-bottom: 5px;
+        }
+        .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.1); color: white; }
+        .nav-item.active { border-right: 4px solid var(--shopify-green); }
+
+        /* --- MAIN CONTENT AREA --- */
+        .main-wrapper { margin-right: 240px; min-height: 100vh; }
+
+        /* --- TOP HEADER --- */
+        header.admin-header {
+            background: white;
+            height: 60px;
+            border-bottom: 1px solid var(--border-light);
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky; top: 0; z-index: 100;
+        }
+
+        .search-bar { background: #edeeef; border-radius: 8px; display: flex; align-items: center; padding: 5px 15px; width: 400px; }
+        .search-bar input { background: none; border: none; outline: none; padding: 5px 10px; width: 100%; font-size: 14px; }
+
+        .user-nav { display: flex; align-items: center; gap: 20px; }
+        .avatar { width: 35px; height: 35px; border-radius: 50%; background: var(--accent-gradient); color: white; display: grid; place-items: center; font-weight: bold; font-size: 12px; }
+
+        /* --- DASHBOARD STATS --- */
+        .dashboard-content { padding: 30px; }
+        .stats-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { padding: 20px; }
+        .stat-card .label { color: #6d7175; font-size: 14px; font-weight: 600; }
+        .stat-card .value { font-size: 24px; font-weight: 700; margin: 10px 0; }
+        .stat-card .trend { font-size: 12px; color: var(--shopify-green); font-weight: 600; }
+
+        /* --- DATA TABLE --- */
+        .table-container { background: white; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-light); }
+        table { width: 100%; border-collapse: collapse; text-align: right; }
+        th { background: #f9fafb; padding: 15px 20px; font-size: 13px; color: #6d7175; border-bottom: 1px solid var(--border-light); }
+        td { padding: 15px 20px; border-bottom: 1px solid var(--border-light); font-size: 14px; }
+
+        .badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .badge.completed { background: #e3f1df; color: #008060; }
+        .badge.pending { background: #fff4e5; color: #965e00; }
+        .badge.cancelled { background: #f1f1f1; color: #6d7175; }
+
+        /* --- STOREFRONT PREVIEW (MODERN MODE) --- */
+        #store-preview { background: #050505; color: white; position: relative; }
+        .hero-mini { height: 400px; display: grid; place-items: center; background: radial-gradient(circle, #1e1b4b 0%, #050505 100%); text-align: center; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar { width: 0; overflow: hidden; }
+            .main-wrapper { margin-right: 0; }
+            .search-bar { width: 150px; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-brand">BAB.</div>
+        <div class="nav-item active" onclick="showSection('admin-panel')">
+            <i data-lucide="layout-dashboard"></i>
+            <span>الرئيسية</span>
         </div>
+        <div class="nav-item" onclick="showSection('orders-section')">
+            <i data-lucide="shopping-cart"></i>
+            <span>الطلبات</span>
+        </div>
+        <div class="nav-item" onclick="showSection('products-section')">
+            <i data-lucide="package"></i>
+            <span>المنتجات</span>
+        </div>
+        <div class="nav-item">
+            <i data-lucide="users"></i>
+            <span>العملاء</span>
+        </div>
+        <div class="nav-item">
+            <i data-lucide="bar-chart-3"></i>
+            <span>التحليلات</span>
+        </div>
+        <div class="nav-item" style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;" onclick="toggleStore()">
+            <i data-lucide="eye"></i>
+            <span>عرض المتجر</span>
+        </div>
+    </aside>
 
-        <nav className="flex-1 px-4 space-y-2 mt-4">
-          <NavItem icon={<LayoutDashboard size={20}/>} label="Home" active isOpen={isSidebarOpen} />
-          <NavItem icon={<ShoppingCart size={20}/>} label="Orders" isOpen={isSidebarOpen} />
-          <NavItem icon={<Package size={20}/>} label="Products" isOpen={isSidebarOpen} />
-          <NavItem icon={<Users size={20}/>} label="Customers" isOpen={isSidebarOpen} />
-          <NavItem icon={<BarChart3 size={20}/>} label="Analytics" isOpen={isSidebarOpen} />
-          <NavItem icon={<Megaphone size={20}/>} label="Marketing" isOpen={isSidebarOpen} />
-        </nav>
-      </aside>
-
-      {/* MAIN CONTENT */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* HEADER */}
-        <header className="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-8 shadow-sm">
-          <div className="relative w-96">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-            <input 
-              type="text" 
-              placeholder="Search..." 
-              className="w-full bg-[#F1F1F1] border-none rounded-md py-1.5 pl-10 focus:ring-2 focus:ring-[#008060] transition-all text-sm"
-            />
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors relative">
-              <Bell size={20} />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-            </button>
-            <div className="flex items-center gap-2 border-l pl-4 border-gray-200">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#008060] to-green-300 flex items-center justify-center text-white font-bold text-xs">
-                JD
-              </div>
-              <span className="text-sm font-medium">Admin</span>
+    <div class="main-wrapper">
+        <header class="admin-header">
+            <div class="search-bar">
+                <i data-lucide="search" size="18"></i>
+                <input type="text" placeholder="البحث عن الطلبات، المنتجات...">
             </div>
-          </div>
+            
+            <div class="user-nav">
+                <i data-lucide="bell" style="cursor: pointer; color: #6d7175;"></i>
+                <div class="user-info flex" style="align-items: center; gap: 10px;">
+                    <span style="font-size: 14px; font-weight: 600;">متجر باب</span>
+                    <div class="avatar">AD</div>
+                </div>
+            </div>
         </header>
 
-        {/* DASHBOARD CONTENT */}
-        <main className="flex-1 overflow-y-auto p-8">
-          <div className="flex justify-between items-end mb-8">
-            <div>
-              <h1 className="text-2xl font-bold mb-1">Dashboard Overview</h1>
-              <p className="text-gray-500 text-sm">Welcome back! Here's what's happening today.</p>
+        <main class="dashboard-content" id="admin-panel">
+            <div class="flex" style="justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h1 style="font-size: 24px; font-weight: 700;">نظرة عامة</h1>
+                <button style="background: var(--shopify-green); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600;">تصدير التقارير</button>
             </div>
-            <button className="bg-[#008060] hover:bg-[#006e52] text-white px-4 py-2 rounded-md text-sm font-medium shadow-md transition-all flex items-center gap-2">
-              Add Product
-            </button>
-          </div>
 
-          {/* STATS CARDS */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            {stats.map((stat, i) => (
-              <div key={i} className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex justify-between items-start mb-4">
-                  <span className="text-gray-500 text-sm font-medium">{stat.title}</span>
-                  <div className={`text-xs px-2 py-1 rounded-full ${stat.trend === 'up' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>
-                    {stat.change}
-                  </div>
+            <div class="stats-grid grid">
+                <div class="card stat-card">
+                    <div class="label">إجمالي المبيعات</div>
+                    <div class="value">$128,430.00</div>
+                    <div class="trend"><i data-lucide="trending-up" size="14"></i> +12% من الشهر الماضي</div>
                 </div>
-                <div className="text-2xl font-bold">{stat.value}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* ORDERS TABLE */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-            <div className="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-              <h3 className="font-bold">Recent Orders</h3>
-              <div className="flex gap-2">
-                <button className="p-2 border rounded-md bg-white hover:bg-gray-50"><Filter size={16}/></button>
-                <button className="text-sm text-[#008060] font-medium hover:underline">View all</button>
-              </div>
+                <div class="card stat-card">
+                    <div class="label">إجمالي الطلبات</div>
+                    <div class="value">1,432</div>
+                    <div class="trend"><i data-lucide="trending-up" size="14"></i> +8% زيادة</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="label">معدل التحويل</div>
+                    <div class="value">3.24%</div>
+                    <div class="trend" style="color: #d72c0d;"><i data-lucide="trending-down" size="14"></i> -1% انخفاض</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="label">متوسط قيمة الطلب</div>
+                    <div class="value">$89.60</div>
+                    <div class="trend"><i data-lucide="trending-up" size="14"></i> +4.3%</div>
+                </div>
             </div>
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="text-xs text-gray-500 uppercase tracking-wider border-b">
-                  <th className="px-6 py-4 font-semibold">Order ID</th>
-                  <th className="px-6 py-4 font-semibold">Customer</th>
-                  <th className="px-6 py-4 font-semibold">Date</th>
-                  <th className="px-6 py-4 font-semibold">Total</th>
-                  <th className="px-6 py-4 font-semibold">Status</th>
-                  <th className="px-6 py-4 font-semibold text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 text-sm">
-                {orders.map((order, i) => (
-                  <tr key={i} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 font-medium text-[#008060]">{order.id}</td>
-                    <td className="px-6 py-4">{order.customer}</td>
-                    <td className="px-6 py-4 text-gray-500">{order.date}</td>
-                    <td className="px-6 py-4 font-semibold">{order.total}</td>
-                    <td className="px-6 py-4">
-                      <StatusBadge status={order.status} />
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <button className="text-gray-400 hover:text-black"><MoreHorizontal size={18}/></button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+
+            <div class="table-container">
+                <div style="padding: 20px; font-weight: 700; border-bottom: 1px solid var(--border-light);">آخر الطلبات</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>رقم الطلب</th>
+                            <th>العميل</th>
+                            <th>التاريخ</th>
+                            <th>الإجمالي</th>
+                            <th>الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-body">
+                        </tbody>
+                </table>
+            </div>
+
+            <div class="card" style="margin-top: 30px; padding: 20px;">
+                <h3 style="margin-bottom: 20px;">مخطط المبيعات الأسبوعي</h3>
+                <canvas id="salesChart" height="100"></canvas>
+            </div>
         </main>
-      </div>
+
+        <main id="store-preview" class="hidden">
+            <div class="hero-mini">
+                <div>
+                    <h1 style="font-size: 4rem; font-weight: 900; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">BAB.</h1>
+                    <p style="color: #a1a1aa; margin-top: 10px;">تمت مراجعة المتجر بنجاح</p>
+                    <button onclick="toggleStore()" style="margin-top: 30px; padding: 12px 30px; background: white; color: black; border-radius: 50px; border: none; cursor: pointer; font-weight: bold;">العودة للإدارة</button>
+                </div>
+            </div>
+        </main>
     </div>
-  );
-};
 
-// Sub-components for cleaner code
-const NavItem = ({ icon, label, active = false, isOpen = true }) => (
-  <div className={`
-    flex items-center gap-3 p-2.5 rounded-lg cursor-pointer transition-all
-    ${active ? 'bg-[#008060] text-white' : 'text-gray-400 hover:bg-white/10 hover:text-white'}
-  `}>
-    {icon}
-    {isOpen && <span className="text-sm font-medium">{label}</span>}
-  </div>
-);
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
 
-const StatusBadge = ({ status }) => {
-  const styles = {
-    Completed: "bg-green-100 text-green-700",
-    Pending: "bg-yellow-100 text-yellow-700",
-    Cancelled: "bg-gray-100 text-gray-700"
-  };
-  return (
-    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${styles[status]}`}>
-      {status}
-    </span>
-  );
-};
+        // Orders Data
+        const orders = [
+            { id: "#1024", customer: "أحمد العتيبي", date: "اليوم، 14:22", total: "$120.00", status: "completed", statusText: "مكتمل" },
+            { id: "#1023", customer: "سارة محمود", date: "اليوم، 12:05", total: "$85.20", status: "pending", statusText: "قيد الانتظار" },
+            { id: "#1022", customer: "عمر خالد", date: "أمس", total: "$210.00", status: "cancelled", statusText: "ملغي" },
+            { id: "#1021", customer: "ليلى حسن", date: "أمس", total: "$45.00", status: "completed", statusText: "مكتمل" }
+        ];
 
-export default ShopifyClone;
+        function renderOrders() {
+            const body = document.getElementById('orders-body');
+            body.innerHTML = orders.map(o => `
+                <tr>
+                    <td style="color: var(--shopify-green); font-weight: 600;">${o.id}</td>
+                    <td>${o.customer}</td>
+                    <td style="color: #6d7175;">${o.date}</td>
+                    <td style="font-weight: 700;">${o.total}</td>
+                    <td><span class="badge ${o.status}">${o.statusText}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        function showSection(id) {
+            // Logic to switch between admin sections
+            console.log("Switching to:", id);
+        }
+
+        function toggleStore() {
+            const admin = document.getElementById('admin-panel');
+            const store = document.getElementById('store-preview');
+            admin.classList.toggle('hidden');
+            store.classList.toggle('hidden');
+        }
+
+        // Charts Logic
+        const ctx = document.getElementById('salesChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+                datasets: [{
+                    label: 'المبيعات ($)',
+                    data: [12000, 19000, 15000, 25000, 22000, 30000, 28000],
+                    borderColor: '#008060',
+                    backgroundColor: 'rgba(0, 128, 96, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        renderOrders();
+    </script>
+</body>
+</html>
