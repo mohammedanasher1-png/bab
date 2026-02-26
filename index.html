@@ -1,15 +1,25 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>باب | سوق إلكتروني</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;800&display=swap" rel="stylesheet">
+
 <style>
+
+/* ===== SHOPIFY STYLE ===== */
 
 :root{
   --bg:#fafafa;
-  --card:#ffffff;
+  --card:#fff;
+  --accent:#ff3e88;
   --text:#111;
   --muted:#777;
-  --accent:#ff3e88;
-  --border:#ececec;
+  --border:#eee;
 }
 
-/* RESET */
 *{
   box-sizing:border-box;
   font-family:'Cairo',sans-serif;
@@ -20,10 +30,9 @@
 body{
   background:var(--bg);
   color:var(--text);
-  line-height:1.6;
 }
 
-/* HEADER (Shopify Style) */
+/* HEADER */
 header{
   background:white;
   padding:18px 40px;
@@ -39,144 +48,332 @@ header{
 .logo{
   font-size:26px;
   font-weight:800;
-  letter-spacing:1px;
 }
 
-.logo span{
-  color:var(--accent);
-}
+.logo span{color:var(--accent)}
 
 nav button{
   background:none;
   border:none;
-  font-size:15px;
-  margin-right:12px;
+  margin-right:10px;
+  font-weight:600;
   cursor:pointer;
   color:var(--muted);
-  transition:.3s;
 }
 
-nav button:hover{
-  color:var(--text);
+nav button:hover{color:black}
+
+/* HERO SECTION */
+.hero{
+  height:70vh;
+  background:url("https://images.unsplash.com/photo-1607082349566-187342175e2f?q=80&w=1600&auto=format&fit=crop") center/cover;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:white;
+  position:relative;
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.45);
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+  max-width:700px;
+}
+
+.hero h1{
+  font-size:42px;
+  margin-bottom:15px;
+}
+
+.hero p{
+  font-size:18px;
+  margin-bottom:25px;
+}
+
+.cta{
+  background:var(--accent);
+  border:none;
+  color:white;
+  padding:14px 26px;
+  border-radius:10px;
+  font-size:16px;
+  cursor:pointer;
 }
 
 /* CONTAINER */
 .container{
   max-width:1200px;
   margin:auto;
-  padding:40px 20px;
+  padding:50px 20px;
 }
 
-/* GRID PRODUCTS */
+/* PRODUCTS */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:28px;
+  gap:25px;
 }
 
-/* PRODUCT CARD */
 .card{
-  background:var(--card);
-  border-radius:16px;
+  background:white;
+  border-radius:14px;
   overflow:hidden;
   border:1px solid var(--border);
-  transition:.35s ease;
+  transition:.3s;
 }
 
 .card:hover{
   transform:translateY(-6px);
-  box-shadow:0 15px 35px rgba(0,0,0,.08);
+  box-shadow:0 15px 30px rgba(0,0,0,.08);
 }
 
 .card img{
   width:100%;
-  height:230px;
+  height:220px;
   object-fit:cover;
 }
 
-/* PRODUCT INFO */
-.card h3{
-  font-size:18px;
-  margin:12px 15px 5px;
-}
+.card h3{margin:12px}
 
 .price{
   color:var(--accent);
-  font-weight:700;
-  margin:0 15px 12px;
+  font-weight:bold;
+  margin:0 12px 10px;
 }
 
-button.action{
-  width:calc(100% - 30px);
-  margin:10px 15px 15px;
-  background:var(--text);
+.action{
+  margin:0 12px 15px;
+  width:calc(100% - 24px);
+  background:black;
   color:white;
   border:none;
-  padding:12px;
-  border-radius:10px;
+  padding:10px;
+  border-radius:8px;
   cursor:pointer;
-  font-weight:600;
-  transition:.3s;
-}
-
-button.action:hover{
-  background:var(--accent);
 }
 
 /* CART */
 .cart-item{
   background:white;
-  padding:14px 18px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  margin-bottom:12px;
+  padding:12px;
+  margin:10px 0;
+  border-radius:10px;
   display:flex;
   justify-content:space-between;
-  align-items:center;
 }
 
-/* ADMIN PANEL */
+/* ADMIN */
 .admin-box{
   background:#111;
   color:white;
   padding:25px;
-  border-radius:16px;
+  border-radius:14px;
   max-width:450px;
   margin:auto;
 }
 
-.admin-box h3{
-  margin-bottom:10px;
-}
-
-/* INPUTS */
 input{
   width:100%;
-  padding:12px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  margin:10px 0;
-  font-size:14px;
+  padding:10px;
+  margin:8px 0;
+  border-radius:8px;
+  border:1px solid #ddd;
 }
 
-input:focus{
-  outline:none;
-  border-color:var(--accent);
-}
-
-/* PAGE ANIMATION */
-section{
-  display:none;
-  animation:fade .4s ease;
-}
-
-section.active{
-  display:block;
-}
-
-@keyframes fade{
-  from{opacity:0;transform:translateY(10px)}
-  to{opacity:1;transform:translateY(0)}
-}
+/* PAGE SYSTEM */
+section{display:none}
+section.active{display:block}
 
 </style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">باب<span>.</span></div>
+
+<nav>
+<button onclick="showPage('home')">الرئيسية</button>
+<button onclick="showPage('cartPage')">السلة</button>
+<button onclick="showPage('adminLogin')">الإدارة</button>
+</nav>
+</header>
+
+<!-- HERO -->
+<section id="home" class="active">
+
+<div class="hero">
+<div class="hero-content">
+<h1>اكتشف منتجات مميزة في مكان واحد</h1>
+<p>
+باب يربطك بأفضل المتاجر لتجربة شراء سهلة وسريعة بدون تعقيد.
+</p>
+<button class="cta" onclick="scrollToProducts()">تصفح المنتجات</button>
+</div>
+</div>
+
+<div class="container">
+<h2 style="margin-bottom:20px">منتجات مختارة</h2>
+<div id="products" class="grid"></div>
+</div>
+
+</section>
+
+<!-- CART -->
+<section id="cartPage" class="container">
+<h2>سلة المشتريات</h2>
+<div id="cart"></div>
+<button class="cta" onclick="clearCart()">حذف السلة</button>
+</section>
+
+<!-- ADMIN LOGIN -->
+<section id="adminLogin" class="container">
+<h2>دخول الإدارة</h2>
+<input id="user" placeholder="اسم المستخدم">
+<input id="pass" type="password" placeholder="كلمة المرور">
+<button class="cta" onclick="login()">دخول</button>
+<p id="error" style="color:red"></p>
+</section>
+
+<!-- ADMIN PANEL -->
+<section id="adminPanel" class="container">
+<div class="admin-box">
+<h3>إضافة منتج</h3>
+
+<input id="pname" placeholder="اسم المنتج">
+<input id="pprice" placeholder="السعر">
+<input type="file" id="pimage">
+
+<button class="cta" onclick="addProduct()">إضافة المنتج</button>
+
+</div>
+</section>
+
+<script>
+
+/* NAVIGATION */
+function showPage(id){
+document.querySelectorAll("section")
+.forEach(s=>s.classList.remove("active"));
+
+document.getElementById(id).classList.add("active");
+}
+
+/* HERO SCROLL */
+function scrollToProducts(){
+window.scrollTo({top:window.innerHeight,behavior:"smooth"});
+}
+
+/* PRODUCTS */
+let products=[
+{
+name:"سماعات لاسلكية",
+price:25,
+img:"https://images.unsplash.com/photo-1518441902110-59e5d49fcd52?q=80&w=800"
+},
+{
+name:"ساعة ذكية",
+price:40,
+img:"https://images.unsplash.com/photo-1546868871-7041f2a55e12?q=80&w=800"
+},
+{
+name:"حقيبة عصرية",
+price:32,
+img:"https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=800"
+}
+];
+
+function renderProducts(){
+const container=document.getElementById("products");
+container.innerHTML="";
+
+products.forEach((p,i)=>{
+container.innerHTML+=`
+<div class="card">
+<img src="${p.img}">
+<h3>${p.name}</h3>
+<div class="price">${p.price}$</div>
+<button class="action" onclick="addToCart(${i})">
+أضف للسلة
+</button>
+</div>`;
+});
+}
+
+/* CART */
+let cart=[];
+
+function addToCart(i){
+cart.push(products[i]);
+renderCart();
+}
+
+function renderCart(){
+const c=document.getElementById("cart");
+c.innerHTML="";
+
+cart.forEach((item,index)=>{
+c.innerHTML+=`
+<div class="cart-item">
+<span>${item.name} - ${item.price}$</span>
+<button onclick="removeItem(${index})">حذف</button>
+</div>`;
+});
+}
+
+function removeItem(i){
+cart.splice(i,1);
+renderCart();
+}
+
+function clearCart(){
+cart=[];
+renderCart();
+}
+
+/* ADMIN LOGIN */
+function login(){
+if(user.value==="admin" && pass.value==="1234"){
+showPage("adminPanel");
+}else{
+error.innerText="بيانات خاطئة";
+}
+}
+
+/* ADD PRODUCT */
+function addProduct(){
+
+const file=pimage.files[0];
+if(!file) return alert("اختر صورة");
+
+const reader=new FileReader();
+
+reader.onload=function(e){
+
+products.push({
+name:pname.value,
+price:pprice.value,
+img:e.target.result
+});
+
+renderProducts();
+showPage("home");
+};
+
+reader.readAsDataURL(file);
+}
+
+renderProducts();
+
+</script>
+
+</body>
+</html>
